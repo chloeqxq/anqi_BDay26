@@ -1,0 +1,11 @@
+{
+  "name": "birthday-cake",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "dev": "node build.mjs --watch"
+  },
+  "dependencies": { "three": "^0.187.0" },
+  "devDependencies": { "esbuild": "^0.28.2" }
+}

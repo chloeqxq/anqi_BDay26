@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Happy Birthday 🎂</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<!-- loaded async so the page never waits on Google Fonts (blocked in some regions) -->
+<link href="https://fonts.googleapis.com/css2?family=Rubik+Mono+One&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<script>
+/* ====== 在这里改内容 ====== */
+window.CAKE_CONFIG = {
+  to: "",            // 寿星名字，比如 "小明"
+  from: "奶龙",      // 署名（顶部标签 FROM 后面也用它）
+  sign: "— 你的奶龙 🐲", // 卡片右下角的署名，点它会和小猪安琪对话
+  candles: 5,        // 蜡烛数量 (1–12)
+  message: ""        // 吹完蜡烛后打字机出现的祝福，可以用 \n 换行
+};
+</script>
+<style>
+  :root { --ink:#1d1030; --pink:#ff5c8a; --yellow:#ffd23f; --mint:#3bceac; }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin:0; height:100%; overflow:hidden; background:#1a1033; color:#fff;
+    font-family: "ZCOOL KuaiLe", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    user-select:none; -webkit-user-select:none; -webkit-touch-callout:none; }
+  #c { position:fixed; inset:0; width:100%; height:100%; display:block; touch-action:none; }
+  .vignette { position:fixed; inset:0; pointer-events:none;
+    background: radial-gradient(ellipse at 50% 45%, transparent 45%, rgba(8,3,20,.65) 100%); }
+  .grain { position:fixed; inset:-50%; pointer-events:none; opacity:.09; mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    animation: grain 1s steps(4) infinite; }
+  @keyframes grain { 0%{transform:translate(0,0)} 25%{transform:translate(-3%,2%)} 50%{transform:translate(2%,-3%)} 75%{transform:translate(-2%,-1%)} }
+
+  .tag { position:fixed; top:18px; left:18px; padding:8px 14px; border:2px solid var(--ink);
+    background:var(--yellow); color:var(--ink); font-family:"Rubik Mono One",sans-serif; font-size:11px;
+    letter-spacing:.06em; border-radius:999px; box-shadow:3px 3px 0 var(--ink); transform:rotate(-3deg); pointer-events:none; }
+  .tag b { color:var(--pink); }
+  #mute { position:fixed; top:16px; right:16px; width:44px; height:44px; border-radius:50%;
+    border:2px solid var(--ink); background:#fff; font-size:18px; cursor:pointer; box-shadow:3px 3px 0 var(--ink); }
+  #mute:active { transform:translate(2px,2px); box-shadow:1px 1px 0 var(--ink); }
+
+  #hint { position:fixed; left:50%; bottom:150px; transform:translateX(-50%); font-size:14px; opacity:.75;
+    white-space:nowrap; pointer-events:none; transition:opacity .4s; text-shadow:0 2px 0 rgba(0,0,0,.4); }
+  #blow { position:fixed; left:50%; bottom:76px; transform:translateX(-50%) rotate(-1.5deg);
+    padding:14px 26px; font:inherit; font-size:20px; color:var(--ink); background:var(--mint);
+    border:3px solid var(--ink); border-radius:18px; box-shadow:5px 5px 0 var(--ink); cursor:pointer;
+    transition: transform .08s, box-shadow .08s, opacity .3s; touch-action:none; }
+  #blow.on { transform:translateX(-50%) translate(4px,4px) scale(.97); box-shadow:1px 1px 0 var(--ink); background:#9ff0dc; }
+  #blow.on span { display:inline-block; animation: shake .08s infinite; }
+  @keyframes shake { 50% { transform: translateX(2px) rotate(3deg);} }
+  .hide { opacity:0 !important; pointer-events:none !important; }
+
+  .marquee { position:fixed; left:-5%; right:-5%; bottom:10px; height:40px; background:var(--pink);
+    border-top:3px solid var(--ink); border-bottom:3px solid var(--ink); transform:rotate(-2deg);
+    overflow:hidden; pointer-events:none; display:flex; align-items:center; }
+  .marquee div { display:flex; white-space:nowrap; animation: mq 18s linear infinite;
+    font-family:"Rubik Mono One","ZCOOL KuaiLe",sans-serif; font-size:16px; color:#fff; -webkit-text-stroke:1px var(--ink); }
+  .marquee span { padding:0 18px; }
+  @keyframes mq { to { transform:translateX(-50%);} }
+
+  #bubble { position:fixed; left:0; top:0; padding:10px 14px; background:#fff; color:var(--ink);
+    border:2.5px solid var(--ink); border-radius:16px; font-size:15px; white-space:nowrap; pointer-events:none;
+    box-shadow:3px 3px 0 var(--ink); opacity:0; }
+  #bubble::after { content:""; position:absolute; left:50%; bottom:-11px; width:16px; height:16px; background:#fff;
+    border-right:2.5px solid var(--ink); border-bottom:2.5px solid var(--ink); transform:translateX(-50%) rotate(45deg); }
+  #bubble.show { animation: bub 2.4s forwards; }
+  @keyframes bub { 0%{opacity:0; margin-top:10px} 8%{opacity:1; margin-top:-4px} 14%{margin-top:0} 85%{opacity:1} 100%{opacity:0} }
+
+  #party { position:fixed; inset:0; pointer-events:none; display:flex; flex-direction:column; align-items:center; }
+  #party h1 { margin:64px 0 0; font-family:"Rubik Mono One","Arial Black",Impact,sans-serif; font-weight:900; font-size:clamp(34px,6.4vw,72px);
+    line-height:1.18; text-align:center; color:var(--yellow); -webkit-text-stroke:2px var(--ink);
+    text-shadow:4px 4px 0 var(--pink), 8px 8px 0 var(--ink); }
+  #party h1 i { display:inline-block; font-style:normal; opacity:0; transform:translateY(-120px) rotate(-30deg); }
+  #party.show h1 i { animation: drop .7s cubic-bezier(.3,1.6,.5,1) forwards, wave 1.6s ease-in-out infinite;
+    animation-delay: calc(var(--i) * 55ms + .2s), calc(var(--i) * 90ms + 1.2s); }
+  @keyframes drop { to { opacity:1; transform:none; } }
+  @keyframes wave { 0%,100%{ transform:translateY(0) } 50%{ transform:translateY(-10px) rotate(-4deg) } }
+  @media (min-width:700px){ #party h1 .br { display:none; } }
+  #party .to { margin-top:14px; font-size:clamp(20px,4vw,34px); opacity:0; transform:scale(.6); transition:all .5s cubic-bezier(.3,1.6,.5,1) 1.2s;
+    text-shadow:0 3px 0 var(--ink); }
+  #party.show .to { opacity:1; transform:none; }
+  #card { position:fixed; left:50%; bottom:74px; width:min(420px, 88vw); padding:18px 20px 14px; background:#fffdf6; color:var(--ink);
+    border:3px solid var(--ink); border-radius:20px; box-shadow:6px 6px 0 var(--ink);
+    transform:translate(-50%, 160%) rotate(2deg); transition: transform .7s cubic-bezier(.3,1.4,.5,1) 1.6s; pointer-events:auto; }
+  #party.show #card { transform:translate(-50%,0) rotate(1.5deg); }
+  #msg { white-space:pre-wrap; font-size:17px; line-height:1.6; min-height:1.6em; }
+  #msg::after { content:"▍"; animation: blink 1s steps(1) infinite; color:var(--pink); }
+  @keyframes blink { 50% { opacity:0; } }
+  #card.empty #msg { display:none; }
+  .sig { display:flex; justify-content:space-between; align-items:center; margin-top:10px; font-size:14px; }
+  #sig { cursor:pointer; padding:2px 0; border-bottom:2px dashed rgba(29,16,48,.35); max-width:62%; line-height:1.4;
+    transition: transform .15s; }
+  #sig:active { transform:scale(.95); }
+  #sig.talk { animation: talk .35s; }
+  @keyframes talk { 30% { transform:translateY(-3px) rotate(-2deg); } }
+  #again { font:inherit; font-size:14px; padding:7px 12px; border:2px solid var(--ink); border-radius:12px; background:var(--yellow);
+    box-shadow:3px 3px 0 var(--ink); cursor:pointer; color:var(--ink); }
+  #again:active { transform:translate(2px,2px); box-shadow:1px 1px 0 var(--ink); }
+
+  @media (max-width:600px){
+    .tag { font-size:9px; }
+    #hint { bottom:142px; font-size:12px; }
+    #party h1 { margin-top:76px; -webkit-text-stroke:1.5px var(--ink); text-shadow:3px 3px 0 var(--pink), 5px 5px 0 var(--ink); }
+  }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="vignette"></div>
+<div class="grain"></div>
+
+<div class="tag" id="tag">A CAKE DELIVERED ACROSS TIME ZONES · FROM <b id="from">C</b></div>
+<button id="mute" aria-label="静音">🔊</button>
+<div id="bubble"></div>
+
+<div id="hint">拖动转蛋糕 · 点蜡烛 · 戳戳蛋糕 · 戳气球</div>
+<button id="blow"><span>按住吹蜡烛 💨</span></button>
+
+<div id="party">
+  <h1 id="title"></h1>
+  <div class="to" id="to"></div>
+  <div id="card">
+    <div id="msg"></div>
+    <div class="sig"><span id="sig"></span><button id="again">🕯️ 再点一次蜡烛</button></div>
+  </div>
+</div>
+
+<div class="marquee"><div id="mq"></div></div>
+
+<script>
+(function(){
+  var C = window.CAKE_CONFIG;
+  document.getElementById('from').textContent = (C.from || 'C').toUpperCase();
+  document.getElementById('sig').textContent = (C.sign || ('— ' + (C.from || 'C'))) + ' 💬';
+  document.getElementById('to').textContent = C.to ? (C.to + '，生日快乐！') : '生日快乐！';
+  var t = 'HAPPY BIRTHDAY', h = '', k = 0;
+  for (var i = 0; i < t.length; i++) h += t[i] === ' ' ? ' <br class="br">' : '<i style="--i:' + (k++) + '">' + t[i] + '</i>';
+  document.getElementById('title').innerHTML = h;
+  var name = C.to ? C.to.toUpperCase() + ' ✦ ' : '';
+  var seg = '<span>HAPPY BIRTHDAY ✦</span><span>生日快乐 ✦</span><span>' + name + 'ANOTHER LAP AROUND THE SUN ✦</span><span>🎂 ✦</span>';
+  document.getElementById('mq').innerHTML = seg + seg + seg + seg;
+})();
+</script>
+<script>/*BUNDLE*/</script>
+</body>
+</html>
